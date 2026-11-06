@@ -1,217 +1,79 @@
-# 换一个 AI 工具，接着做，而不是从头解释
+# Multiple-Agent-Memory-Exchage
 
-**Multiple-Agent-Memory-Exchage · 本地多 Agent 共享记忆**
+[中文](#中文) · [English](#english) · [Download v0.2.1-preview](https://github.com/LevinShi/Multiple-Agent-Memory-Exchage/releases/tag/v0.2.1-preview)
 
-你在 Codex 里定了方案，换到 Cursor 开发，又在 ZCode 里排查问题。工具越多，你越像它们之间的“人工交接员”：复制聊天、补背景、重讲约束，还得记住谁做到了哪一步。
+## 中文
 
-这个项目给参与同一项目的 AI 工具准备一份**留在你电脑上的工作记录**：已经决定什么、完成什么、为什么这样做、下一步是什么。配置好后，工具按项目授权读取记录、保存进展；换一个工具，你可以直接说“继续这个项目”。
+### 换个 AI 工具，接着做，不用从头解释
 
-**值得下载的理由：少做一次手工交接，让已经做出的决定和完成的工作能被下一位 Agent 接住。**
+在 Codex 定了方案，换到 Cursor 却又要复制聊天、重讲约束？这个项目把**决定、进展和下一步**留在本机，让获准参与的 Agent 接上同一个项目。
 
-[下载预览版](https://github.com/LevinShi/Multiple-Agent-Memory-Exchage/releases/tag/v0.2.1-preview) · [先看接力例子](#一个例子从定方案到接着开发) · [开始试用](#先用一个无敏感项目试一遍) · [常见问题](#下载前你可能想问)
+你少做手工交接，工具少重复已完成的工作。适合经常在多个 AI 编程工具之间切换的人；首次需要配置权限和入口规则，之后以自然语言接力为目标。
 
-> 当前是 **v0.2.1-preview**，适合愿意配置本地工具的 AI 爱好者。它不是下载安装后立即接管所有聊天的成品 App。首次需要配置项目权限和各工具的规则；日常接力才以自然语言为主。
+### 一个接力例子
 
-## 你得到的，是更省心的项目接力
+1. **Codex：**“在 demo 项目里做读书清单，只用本地存储。”
+2. **Cursor：**“继续 demo 项目，实现添加书籍。”
+3. **回到 Codex：**“看看现在做到哪里，检查遗漏。”
 
-|你可能遇到的事|使用后希望发生的变化|本项目提供什么|
-|---|---|---|
-|换工具就得重新讲需求和上轮结论|让下一位 Agent 从已有决定继续|同一项目的共享工作记录|
-|几个工具各说各的，忘了“不用云服务”等约束|让授权工具读到同一套工作纪律|共同规则与项目记录|
-|不知道一句“已完成”有没有真的保存|能核对谁写了、另一端有没有读取|本地状态页与入口操作证据|
-|工作、生活和不同客户的项目混在一起|按项目决定谁可以读、谁可以写|默认拒绝，项目独占或多端共享|
-|后来改了方案，找不到当时的依据|保留旧决定及修订关系|带来源的追加记录，而非覆盖旧内容|
-
-这些变化依赖客户端实际加载并执行规则。**“它说记住了”不等于接力成功**；第一次试用要核对保存与回读，下面有具体方法。
-
-## 一个例子：从定方案到接着开发
-
-假设你要做一个“读书清单”小工具。过去，你可能把 Codex 的聊天复制给 Cursor，再解释一遍哪些想法已经排除了。
-
-配置好本项目后，可以这样接力。下面是**说明性示例，不是客户端实测对话或效果承诺**。
-
-**第一步，在 Codex 里定范围。**
-
-> 在 demo 项目里做一个读书清单小工具。先定三个必要功能，数据只保存在本地。
-
-这一轮值得留下的工作记录可能是：
-
-```text
-决定：只做添加书籍、修改阅读状态、按状态筛选。
-约束：本地保存，不做登录，不接云数据库。
-进展：需求范围已确定，尚未实现页面。
-下一步：做页面草图，再实现添加书籍。
-```
-
-**第二步，换到 Cursor。**
-
-> 继续 demo 项目的读书清单，先给我页面草图，再实现添加书籍。
-
-预期的接力行为是：Cursor 先读取获准访问的项目记录，沿用三个功能和本地保存约束，再推进新工作。你不用重新粘贴整段聊天。完成后，它把新增进展写回同一个项目。
-
-**第三步，回到 Codex。**
-
-> 看看 demo 项目现在做到哪里了，检查一下还有什么遗漏。
-
-如果接力生效，Codex 能读到 Cursor 留下的进展。**代码文件仍要放在双方都能访问的项目目录中**：本项目交接上下文，不负责搬运代码、同步分支或自动解决代码冲突。
+工具应读取已有约束、推进任务并保存新进展。以上是说明性例子；首次使用仍要核对实际读写。代码目录需要双方都能访问，本项目不负责同步代码。
 
 ```mermaid
 flowchart LR
-    A["你在 Codex 定方案"] --> B["保存决定、约束和下一步"]
-    B --> M[("本机的项目工作记录")]
-    M --> C["Cursor 经授权读取"]
-    C --> D["你说：继续这个项目"]
-    D --> E["推进工作并保存新进展"]
-    E --> M
-    M --> F["回到 Codex，接着检查"]
+    A["Codex：定方案 / Plan"] --> M[("本机项目记录 / Local project notes")]
+    M --> B["Cursor：接续 / Continue"]
+    B --> M
+    M --> C["Codex：复查 / Review"]
 ```
 
-你分享的是**可交接的工作上下文**，不是把一个模型的内部记忆复制到另一个模型，也不是把所有聊天全文塞给每个工具。
+### 三步试用
 
-## 哪些人值得现在试，哪些人可以再等等？
+1. 下载源码，解压后运行 `python3 demo.py`，先看不调用模型的离线演示。
+2. 按[使用指南](docs/USER-GUIDE.md)建立 demo 库，把生成的入口规则加入两个工具。
+3. 只说“继续 demo 项目”，确认第二端读到前一端记录，并自动保存新进展。
 
-**适合现在下载：**
+环境：macOS / Linux、Python 3.10+。提供 Codex、Cursor、ZCode、MiniMax Code 入口模板；模型是否遵守规则需要实测。普通网页聊天不能直接读取本机库。
 
-- 同一个项目经常在两个或更多 AI 编程工具之间切换。
-- 已经厌倦复制摘要、重复讲约束，希望项目进展能留下来。
-- 希望资料留在自己的电脑上，并愿意做一次规则与权限配置。
-- 愿意用非敏感项目试用，并反馈接力在哪一步失效。
+### 下载前的三个问题
 
-**可以先等等：**你只用一个工具且现有记忆已够用；需要手机、网页、不同电脑立即全量同步；或希望一个完全无需配置的可视化 App。这些不是当前预览版能交付的体验。
+**为什么不直接用一个 Markdown？** 简单交接当然可以。本项目多做的是项目权限检查、来源与修订记录，以及可核对的读写轨迹。
 
-## 现在能用到什么程度？
+**所有聊天都会共享吗？** 不会。项目默认拒绝访问，授权后才共享必要进展。它是合作型 Agent 的工作流门禁，不是抵御恶意程序的安全沙箱。云端模型读取的上下文仍可能发给其服务商。
 
-|工具或能力|当前可交付的程度|
-|---|---|
-|Codex、MiniMax Code|提供入口模板；维护者环境观察过 Codex → MiniMax Code → Codex 的自然语言接力，不等于每个新安装都已通过|
-|Cursor、ZCode|提供入口模板；仍需在你的客户端版本中验证规则加载、自动保存和跨端回读|
-|共同工作纪律|初始化生成共同规则文件，可按自己的偏好维护；各工具需通过入口读取，不会自动修改模型本身的风格|
-|普通 ChatGPT / Grok Bot 聊天|不能直接访问本机库；现阶段需要单独授权后手工交接摘要|
-|Gemini 网页|有实验性 Chrome 选定会话采集，原文默认私有；仅做过 macOS 短会话实测，当前线上测试暂停|
-|ChatGPT 自动采集、Gemini 原生客户端直接采集|尚未实现|
-|更好的检索、更多 Agent|后续必做范围，见[路线图](docs/ROADMAP.md)|
+**当前成熟度如何？** 这是预览版，发布时四组远端 CI 通过；真实接力只在部分客户端验证。Gemini 采集是可选实验功能，线上测试仍暂停，不是核心使用前提。
 
-**验证证据：**发布提交已通过 macOS / Ubuntu × Python 3.10 / 3.12 的四组远端 CI，包含 32 项测试和两套离线演示。[查看 CI](https://github.com/LevinShi/Multiple-Agent-Memory-Exchage/actions/runs/42259396490)。自动化测试证明程序行为，不代替真实客户端的自然语言接力验收。
+[使用与详细 FAQ](docs/USER-GUIDE.md) · [权限](docs/PERMISSIONS.md) · [接入](docs/CLIENTS.md) · [路线图](docs/ROADMAP.md)
 
-## 先用一个无敏感项目试一遍
+## English
 
-你需要 **macOS 或 Linux、Python 3.10+，以及能执行本地命令的 AI 编程工具**。不需要为这个项目注册账号、购买数据库或填写模型 API Key；你所用 AI 工具本身的账号和费用不变。原生 Windows 暂不支持。
+### Switch AI tools without starting the conversation over
 
-### 1. 下载，先看一次离线演示
+You agree on a plan in Codex, then switch to Cursor—and have to explain it all again. This project keeps **decisions, progress, and next steps** on your computer so authorized agents can pick up the same project.
 
-从 [Release](https://github.com/LevinShi/Multiple-Agent-Memory-Exchage/releases/tag/v0.2.1-preview) 下载源码 ZIP，解压，在代码目录打开终端：
+Spend less time copying summaries and repeating work. It is designed for people who use more than one AI coding tool. Permissions and client rules need a one-time setup; after that, the aim is to hand work over in plain language.
 
-```sh
-python3 demo.py
-```
+### One handoff, three turns
 
-它用临时合成资料演示“第一端写入 → 第二端接续 → 第一端回读”，还会检查未授权访问被拒绝、导出保持关闭。看到 `synthetic_cli_relay: passed`，表示本机程序演示通过。
+1. **In Codex:** “Build a reading list in the demo project. Store data locally.”
+2. **In Cursor:** “Continue the demo project. Implement adding a book.”
+3. **Back in Codex:** “Check the current progress and look for gaps.”
 
-**这个演示不启动 Codex 或 Cursor，也不访问 Gemini。** 它让你先确认程序能运行；真实 Agent 接力在下一步验证。
+Each tool is expected to read the existing constraints, do its part, and save an update. This is an illustrative example, not a guarantee: verify the first handoff in your own clients. Both tools also need access to the code; this project shares context, not source files. The diagram above shows the flow.
 
-不熟悉终端，也可以把下面这段话交给本地编程 Agent：
+### Try it in three steps
 
-> 在我刚解压的 Multiple-Agent-Memory-Exchage 目录里，先读 README 并运行离线 demo。通过后建立一个新的 demo 记忆库，帮我配置当前工具的入口规则，保留已有规则。只使用合成资料，不启用 Gemini 采集，不扩大真实项目权限。最后告诉我第二个工具还需要配置什么。
+1. Download and extract the source, then run `python3 demo.py`. The offline demo does not call any models.
+2. Follow the [setup guide](docs/QUICKSTART-EN.md) to create a demo vault and add its generated rules to two tools.
+3. Say “Continue the demo project.” Check that the second tool reads the first tool’s notes and saves its own progress.
 
-### 2. 建立 demo 库，给两个工具接上入口
+Requires macOS or Linux and Python 3.10+. Rule templates are provided for Codex, Cursor, ZCode, and MiniMax Code. Actual compliance depends on the client and model. Ordinary web chats cannot directly access this local vault.
 
-```sh
-python3 init_vault.py "$HOME/local-agent-memory-demo" --demo
-```
+### Three things to know
 
-它创建一个独立的本地目录，为名为 `demo` 的示例项目开放四端读写，不开放导出。**这个授权只用于示例，不代表你的真实项目都应该共享。** 如果目录已存在，程序会拒绝覆盖，请换一个新目录。
+**Why not just use a Markdown file?** For a simple handoff, you can. This project adds project-level access checks, source and revision tracking, and a record of reads and writes you can inspect.
 
-新目录里会生成各工具的入口说明，例如 `ENTRY-codex.md`、`ENTRY-cursor.md`。把对应内容加入你准备试用的两个客户端的默认规则，保留原规则，再开启新会话。不同工具的放置位置见[客户端接入说明](docs/CLIENTS.md)。
+**Does it share every conversation?** No. Access is denied by default; authorized projects share selected progress notes. This is a workflow gate for cooperative agents, not a sandbox against hostile software. Context read by a cloud-based model may still be sent to that model’s provider.
 
-### 3. 只用自然语言，完成上面的读书清单接力
+**How ready is it?** This is a preview. All four CI jobs passed for the release, but real handoffs have only been verified in some clients. Gemini capture is optional and experimental; live testing remains paused. You do not need it to use shared project memory.
 
-成功标准很具体：
-
-- 第一端没有被提醒“记一下”，仍自动保存了决定和下一步。
-- 第二端没有收到你复制的摘要，仍读到了前一端的记录并据此继续。
-- 回到第一端，能读到第二端新增的进展。
-
-第一次请展开工具调用确认：首个共享库操作是 `gateway.py begin`；结束有 `save` 返回的记录 ID；另一端有读取结果。仅聊天里说“已保存”不算通过。初始化后的库目录中还会生成本地 `dashboard.html` 状态页；用浏览器打开并刷新，可看入口记录到的最近操作，不含聊天正文。
-
-### 4. 确认有用，再接入真实项目
-
-创建另一个没有默认授权的库：
-
-```sh
-python3 init_vault.py "$HOME/local-agent-memory-vault"
-```
-
-然后明确告诉维护 Agent：“项目 A 只给 ZCode；项目 B 给 Codex 和 Cursor 读写；都不允许导出。”由它按你的决定配置权限。详细格式见[项目权限说明](docs/PERMISSIONS.md)。新项目没有授权时，入口默认拒绝。
-
-## 下载前，你可能想问
-
-### 我自己写一个 Markdown 交接文档，为什么还需要它？
-
-如果你愿意每次手工更新，单个 Markdown 完全可以满足简单交接。本项目增加的是一套可重复执行的流程：先检查项目权限，再给上下文；保存来源与修订关系；留下可核对的操作记录。价值在于把交接习惯做成各工具的默认工作方式，而不是 Markdown 格式本身。
-
-### 配置一次后，真的不用每次提醒读取和保存吗？
-
-这是设计目标，但不是模型行为保证。入口规则要求工具开始时读取、结束时保存；模型可能忽略规则，客户端升级也可能改变加载方式。因此先用一个 demo 验证你自己的两个工具。首次配置和项目授权仍需要你决定，日常接力不应每轮重复查存口令。
-
-### 会把我的所有聊天都收集起来吗？
-
-不会。核心记录的是 Agent 保存的必要进展。可选的 Gemini 采集只针对你显式选择的网页会话，原文另存私有区；要分享摘要，还需指定内容和目标项目。使用共享记忆核心不需要安装采集扩展。
-
-```mermaid
-flowchart LR
-    P["可选：你选定的聊天"] --> V["本机私有资料区"]
-    V --> U["你确认摘要与目标项目"]
-    U --> G{"项目权限检查"}
-    G -->|允许| M["共享项目记录"]
-    G -->|拒绝| X["不写入共享库"]
-```
-
-### “本地保存”是不是意味着内容不会到云端？
-
-本项目自身没有云端中转或同步服务，文件留在本机。但如果你使用云端模型的编程工具，它读取的上下文可能随请求发给该工具的模型服务商。**本地存储不等于模型离线推理。** 是否处理敏感资料，还要看你所用客户端和模型的配置。
-
-### 能阻止一个不守规则的 Agent 偷读其他项目吗？
-
-不能把它当作强安全隔离。权限入口能阻止正常流程中的未授权操作，但客户端身份由工具自报；同一系统用户下的进程可能直接读取文件绕过入口。适合管理合作型 Agent 的共享范围，不适合以此隔离敌对程序或不同保密等级的数据。详见[安全边界](SECURITY.md)。
-
-### “不共享”会不会把原来的工具也锁在外面？
-
-不会，只要给原属工具保留独占读写授权。比如只给 ZCode 的项目，它可以继续写，其他工具通过入口会被拒绝。撤销权限不删除历史，也不能收回别人之前已经复制的内容。
-
-### 会不会越用越大，占满磁盘？
-
-核心只应保存必要进展，不默认复制全部聊天或下载附件；共享记录目前没有全库硬容量上限。可选私有采集按内容去重，默认上限 50 MiB，达到上限暂停而不是自动删原文。软删除会保留原文，备份和 Git 历史另占空间；原子写入也需要临时空间。它适合先做个人小规模试点，不是无限容量的聊天仓库。
-
-### 能接力代码、同步不同电脑，或让所有工具共用一个“人格”吗？
-
-它能共享你明确写下的约束、工作习惯和项目进度；不会同步代码目录、不同电脑的文件，也不能让不同模型表现完全相同。跨电脑文件同步、后台 Agent 调度和统一聊天窗口都不是当前能力。
-
-### Gemini 采集现在建议开启吗？
-
-建议先试共享记忆核心。采集是实验能力，长历史、复杂回复与真实账号切换仍待验收；当前维护者已暂停线上测试。不要为了验证插件反复向 Gemini 发请求。需要了解时看[采集说明](docs/GEMINI-CAPTURE.md)，不要把短会话实测理解为长期稳定性或账号安全保证。
-
-### 下载后，我的资料会跟着提交到这个公开仓库吗？
-
-不会自动上传。请把自己的记忆库放在代码仓库之外，不要把 `records`、`permissions.json`、私有 `state.json` 或聊天原文提交到 GitHub。公开仓库提供通用代码、规则模板、合成测试和文档。
-
-## 想帮助它从“可试用”变成“可靠可用”？
-
-最有价值的反馈是：**在一台新环境，用两个工具，只通过自然语言完成一次接力。** 如果失败，请记录系统和客户端版本、规则放在哪里、哪一步没有读取或保存，并提交脱敏的最小例子。不要上传私人聊天、密钥或完整记忆库。
-
-[提交试用反馈](https://github.com/LevinShi/Multiple-Agent-Memory-Exchage/issues/new?template=bug_report.md) · [完整交付边界](docs/RELEASE.md) · [路线图](docs/ROADMAP.md) · [贡献说明](CONTRIBUTING.md) · [MIT 许可](LICENSE)
-
-<details>
-<summary>开发者与维护者：测试、私有导入和接口说明</summary>
-
-```sh
-python3 -m unittest discover -v
-python3 demo_capture.py
-```
-
-`demo_capture.py` 是完全离线的私有导入演示，不安装浏览器扩展、不访问 Gemini。
-
-正常客户端通过 `gateway.py begin` 获取 `run_id`；后续 `search/show/save/evidence` 携带同一 `--run`、真实 `--actor` 和 `--project`。`save` 用标准输入传正文，并提供任务、状态与来源；更正通过 `--supersedes` 关联旧记录。项目和任务 ID 使用 1–80 位英文、数字、下划线或连字符，正文支持中文。
-
-更多：[入口模板](ENTRY.template.md) · [导入协议](docs/IMPORT-FORMAT.md) · [验收记录](docs/VALIDATION.md)。
-
-</details>
+[English setup](docs/QUICKSTART-EN.md) · [Detailed guide, Chinese](docs/USER-GUIDE.md) · [Security](SECURITY.md) · [MIT License](LICENSE)
