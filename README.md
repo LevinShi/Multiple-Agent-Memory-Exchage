@@ -1,4 +1,6 @@
-# Local Agent Memory
+# Multiple-Agent-Memory-Exchage
+
+Local Agent Memory
 
 让多个本地 AI 编程工具接续同一项目：先按项目授权读取上下文，完成工作后保存少量进展。Markdown 留记录，Python 管入口，Git 可用于你自己的版本管理。
 
@@ -68,7 +70,7 @@ python3 "$HOME/local-agent-memory-vault/gateway.py" begin --actor codex --projec
 |独立初始化、CLI双actor接力、权限拒绝、修订、并发写|本机自动化测试通过；见[验收记录](docs/VALIDATION.md)|
 |真实自然语言接力|维护者环境曾观察Codex→MiniMax Code→Codex成功；不等于所有安装/模型都通过|
 |Cursor、ZCode|提供入口模板；此发布包未在这些客户端重新做独立安装验收|
-|Linux / 多Python版本|提供GitHub Actions配置；发布前尚无远端CI结果|
+|Linux / 多Python版本|由GitHub Actions验证；以Release关联提交的CI结果为准|
 |Gemini选定网页会话采集|已实现私有导入+本地原生通道，macOS短会话实测；见[使用说明](docs/GEMINI-CAPTURE.md)|
 |ChatGPT采集、Gemini原生客户端直接采集|当前没有|
 |语义检索、更多Agent、云同步|当前没有；更好检索与更多Agent保留为路线图|
