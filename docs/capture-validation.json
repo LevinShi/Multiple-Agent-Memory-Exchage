@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "python_tests": 30,
+  "result": "passed",
+  "live_short_conversation": {
+    "first_messages": 2,
+    "incremental_messages": 4,
+    "pause_blocked_write": true,
+    "explicit_reselect_messages": 6,
+    "repeated_selection_revisions": 3,
+    "navigation_stop": true,
+    "tombstone_blocked_reselect": true
+  },
+  "capture_currently_paused": true,
+  "further_online_testing": "stopped_after_user_account_risk_concern",
+  "limitations": [
+    "long history",
+    "real account switching",
+    "complex responses",
+    "native Gemini direct capture",
+    "ChatGPT capture",
+    "Linux and remote CI"
+  ]
+}

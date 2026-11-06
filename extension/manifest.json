@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Local Agent Memory — Gemini Private Capture",
+  "version": "0.2.0",
+  "description": "Only capture the Gemini conversation you explicitly select, into a private local store.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "nativeMessaging"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "选择当前Gemini会话进行私有采集",
+    "default_popup": "popup.html"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5LKbjeEOpGLB7k9y4V3I/uim8v6B78wuEMCS5QGev5XOUZkkBvpkeawdwcKb3sDxtydtKV47zf8LNpw3oijnmBPc1ep2dkCnCnuKwFK08NfC2ll14tQpj/EbTlYK26AIP2gtPyt8xCem8JxS1VOzdQuBw0pTb83eZse/m+iQTtNywwmuxGslDzPdgdR4MBlXgnPjAPIbPGcUZ3jqkGoKMAeUqkiUbI1dK602u9zIpK6KBuMBia7fifGsSGYcCiUJg+DUd3INXGwoXZX49fdr2esD0IkOV0S3nwM0AuNQhZesAwhlyLfIh64V6VpgBNF2O+nUPknKrrOUOVVP12ArEQIDAQAB"
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0-preview",
+  "python": "3.12.0",
+  "platform": "darwin",
+  "tests": 18,
+  "result": "passed",
+  "relocated_directory_with_spaces": true,
+  "synthetic_relay": {
+    "synthetic_cli_relay": "passed",
+    "unapproved_actor": "denied",
+    "unknown_project": "denied",
+    "export": "disabled",
+    "real_client_acceptance": "not_tested_by_this_script"
+  },
+  "privacy_checks": "allowlist source copy; no runtime directories; known personal path/project markers absent",
+  "remote_ci": "not_run",
+  "independent_user_install": "not_yet"
+}
